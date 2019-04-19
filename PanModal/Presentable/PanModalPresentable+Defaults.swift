@@ -41,6 +41,10 @@ public extension PanModalPresentable where Self: UIViewController {
     var backgroundAlpha: CGFloat {
         return 0.7
     }
+    
+    var backgroundColor: UIColor {
+        return .black
+    }
 
     var scrollIndicatorInsets: UIEdgeInsets {
         let top = shouldRoundTopCorners ? cornerRadius : 0
@@ -102,6 +106,10 @@ public extension PanModalPresentable where Self: UIViewController {
 
     func panModalWillDismiss() {
 
+    }
+    
+    func shouldDismissOnOutsideTap() -> Bool {
+        return true
     }
 
 }

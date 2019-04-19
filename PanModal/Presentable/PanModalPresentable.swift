@@ -195,5 +195,19 @@ public protocol PanModalPresentable {
      Default value is an empty implementation.
      */
     func panModalWillDismiss()
-
+    
+    /**
+     Sets the background color of the dimmed view.
+     
+     Default value is `.black`
+    */
+    var backgroundColor: UIColor { get }
+    
+    /**
+     Asks the delegate if the modal should be dismissed on an outside tap
+     
+     Defaults to `true` - always dismiss on outer tap
+    */
+    func shouldDismissOnOutsideTap() -> Bool
+    
 }

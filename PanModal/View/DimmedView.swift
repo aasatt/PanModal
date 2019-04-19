@@ -40,6 +40,8 @@ public class DimmedView: UIView {
             }
         }
     }
+    
+    var passThoughView: UIView?
 
     /**
      The closure to be executed when a tap occurs
@@ -50,18 +52,20 @@ public class DimmedView: UIView {
      Tap gesture recognizer
      */
     private lazy var tapGesture: UIGestureRecognizer = {
-        return UITapGestureRecognizer(target: self, action: #selector(didTapView))
+        let t = UITapGestureRecognizer(target: self, action: #selector(didTapView))
+        t.cancelsTouchesInView = false
+        return t
     }()
 
     private let dimAlpha: CGFloat
 
     // MARK: - Initializers
 
-    init(dimAlpha: CGFloat = 0.7) {
+    init(dimAlpha: CGFloat = 0.7, color: UIColor = .black) {
         self.dimAlpha = dimAlpha
         super.init(frame: .zero)
         alpha = 0.0
-        backgroundColor = .black
+        backgroundColor = color
         addGestureRecognizer(tapGesture)
     }
 
@@ -73,6 +77,16 @@ public class DimmedView: UIView {
 
     @objc private func didTapView() {
         didTap?(tapGesture)
+    }
+    
+    public override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+        if let hitView = super.hitTest(point, with: event), hitView != self {
+            return hitView
+        }
+        if let pass = passThoughView, let hit = pass.hitTest(point, with: event) {
+            return hit
+        }
+        return self
     }
 
 }

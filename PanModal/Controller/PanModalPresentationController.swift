@@ -106,13 +106,18 @@ public class PanModalPresentationController: UIPresentationController {
     private lazy var backgroundView: DimmedView = {
         let view: DimmedView
         if let alpha = presentable?.backgroundAlpha {
-            view = DimmedView(dimAlpha: alpha)
+            let color = presentable?.backgroundColor ?? .black
+            view = DimmedView(dimAlpha: alpha, color: color)
         } else {
             view = DimmedView()
         }
         view.didTap = { [weak self] _ in
+            guard self?.presentable?.shouldDismissOnOutsideTap() ?? true else {
+                return
+            }
             self?.dismissPresentedViewController()
         }
+        view.passThoughView = self.presentingViewController.view
         return view
     }()
 
@@ -218,7 +223,6 @@ public class PanModalPresentationController: UIPresentationController {
      */
     override public func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
-
         coordinator.animate(alongsideTransition: { [weak self] _ in
             guard
                 let self = self,
@@ -244,7 +248,6 @@ public extension PanModalPresentationController {
      to the given presentation state
      */
     public func transition(to state: PresentationState) {
-
         guard presentable?.shouldTransition(to: state) == true
             else { return }
 
