@@ -35,7 +35,7 @@ public extension PanModalPresentable where Self: UIViewController {
     }
 
     var springDamping: CGFloat {
-        return 0.8
+        return 0.85
     }
 
     var backgroundAlpha: CGFloat {
